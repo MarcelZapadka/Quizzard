@@ -4,8 +4,10 @@ import { FcNext } from "react-icons/fc";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import getQuizzQuestions from '../../quiz-api-service';
+import { useDispatch, useSelector } from "react-redux"
 
 function Quiz() {
+
 
   useEffect(() => {
     // getQuizzQuestions().then(data => console.log(data));
@@ -29,7 +31,7 @@ function Quiz() {
           </div>
           
           <form className='answers-form'>
-            <input type="button" value={"Hello"} />
+            <input type="button" value={"Hello"}/>
             <input type="button" value={"Hello"} />
             <input type="button" value={"Hello"} />
             <input type="button" value={"Hello"} />
