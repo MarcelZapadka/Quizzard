@@ -4,7 +4,7 @@ import { FcNext } from "react-icons/fc";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useDispatch, useSelector } from "react-redux"
-import { incrementCorrectAnswersCount, goToNextQuestion } from '../../redux/quizSlice';
+import { incrementCorrectAnswersCount, goToNextQuestion, clearQuiz } from '../../redux/quizSlice';
 import { useNavigate } from "react-router-dom";
 
 function Quiz() {
@@ -22,6 +22,7 @@ function Quiz() {
 
   function submitAnswer(answer) {
     if (currentQuestionIndex === quiz.length - 1) {
+      dispatch(clearQuiz())
       navigate("/home");
       return
     }

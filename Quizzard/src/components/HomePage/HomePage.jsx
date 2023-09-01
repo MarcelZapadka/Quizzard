@@ -3,9 +3,11 @@ import '../HomePage/HomePage.scss'
 import Button from 'react-bootstrap/Button';
 import { FcGraduationCap, FcApproval, FcClock } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux"
 
 function HomePage({startNewQuiz}) {
   const navigate = useNavigate();
+  const isStarted = useSelector(state => state.quiz.isStarted);
 
   function navigateToQuiz() {
     navigate("/play");
@@ -38,7 +40,7 @@ function HomePage({startNewQuiz}) {
       </section>
       <section className='buttons-wrapper'>
       <Button className='button' variant="primary" onClick={startNewGame}> Start new Quiz </Button>
-      <Button className='button' variant="primary" onClick={navigateToQuiz}> Continue Quizz </Button>
+      <Button disabled={!isStarted} className='button' variant="primary" onClick={navigateToQuiz}> Continue Quizz </Button>
       </section>
     </div>
   )
