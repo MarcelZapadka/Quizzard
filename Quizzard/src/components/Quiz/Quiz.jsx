@@ -4,19 +4,33 @@ import { FcNext } from "react-icons/fc";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useDispatch, useSelector } from "react-redux"
+import { incrementCorrectAnswersCount, goToNextQuestion } from '../../redux/quizSlice';
+import { useNavigate } from "react-router-dom";
 
-function Quiz({startNewQuiz}) {
+function Quiz() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const quiz = useSelector(state => state.quiz.quiz);
   const currentAnswers = useSelector(state => state.quiz.currentAnswers);
   const currentQuestionIndex = useSelector(state => state.quiz.currentQuestionIndex);
+  const currentQuestionInfo = useSelector(state => state.quiz.currentQuestionInfo);
   let answersList = getDisplayedAnswers();
 
-  useEffect(() => {
-    quiz.length === 0 ? startNewQuiz() : null;
-  }, [])
-
   function getDisplayedAnswers() {
-    return currentAnswers.map((answer, index) => <input type="button" value={answer} key={`Answer ${index}`} />);
+    return currentAnswers.map(answer => <input type="button" value={answer} key={answer} onClick={() => submitAnswer(answer)}/>);
+  }
+
+  function submitAnswer(answer) {
+    if (currentQuestionIndex === quiz.length - 1) {
+      navigate("/home");
+      return
+    }
+    if (answer === currentQuestionInfo.correctAnswer) {
+      dispatch(incrementCorrectAnswersCount());
+      dispatch(goToNextQuestion());
+      return
+    }
+    dispatch(goToNextQuestion());
   }
 
   return (

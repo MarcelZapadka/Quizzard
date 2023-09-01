@@ -3,8 +3,12 @@ import '../FooterNav/FooterNav.scss'
 import { NavLink } from 'react-router-dom';
 import { SlControlPlay, SlHome, SlUser } from "react-icons/sl";
 
-
 function FooterNav() {
+
+  function continueOrStartNewQuiz() {
+    quiz.length === 0 || currentQuestionIndex === 9 ? startNewQuiz() : null;
+  }
+
   return (
     <footer className='footer'>
         <div className='link-wrapper'>
@@ -14,7 +18,7 @@ function FooterNav() {
           </NavLink>
         </div>
         <div className='link-wrapper'>
-          <NavLink to="play" className={({isActive}) => isActive ? 'active' : 'inactive'}>
+          <NavLink onClick={continueOrStartNewQuiz} to="play" className={({isActive}) => isActive ? 'active' : 'inactive'}>
             <SlControlPlay/>      
             <p>Play</p>
           </NavLink>

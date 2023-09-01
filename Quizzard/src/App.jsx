@@ -6,23 +6,20 @@ import Quiz from './components/Quiz/Quiz'
 import '../src/App.scss'
 import { Route, Routes } from 'react-router-dom'
 import { useDispatch } from "react-redux"
-import { setQuiz, setCurrentQuestion, setAnswers } from './redux/quizSlice';
+import { setQuiz } from './redux/quizSlice';
 
 export default function App() {
   const dispatch = useDispatch();
   function startNewQuiz() {
-    getQuizzQuestions().then(quizQuestions => {
-      dispatch(setQuiz(quizQuestions));
-      dispatch(setCurrentQuestion());
-      dispatch(setAnswers());
-    });
+    getQuizzQuestions()
+    .then(quizQuestions => dispatch(setQuiz(quizQuestions)));
   }
 
   return (
     <div className='App'>
       <Routes>
         <Route path='/home' element={<HomePage startNewQuiz={startNewQuiz}/>}/>
-        <Route path='/play' element={<Quiz startNewQuiz={startNewQuiz}/>}/>
+        <Route path='/play' element={<Quiz/>}/>
       </Routes>
       <FooterNav/>
     </div>
