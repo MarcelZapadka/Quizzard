@@ -2,8 +2,11 @@ import React from 'react'
 import '../FooterNav/FooterNav.scss'
 import { NavLink } from 'react-router-dom';
 import { SlControlPlay, SlHome, SlUser } from "react-icons/sl";
+import { useSelector } from "react-redux"
 
-function FooterNav() {
+function FooterNav({startNewQuiz}) {
+  const quiz = useSelector(state => state.quiz.quiz);
+  const currentQuestionIndex = useSelector(state => state.quiz.currentQuestionIndex);
 
   function continueOrStartNewQuiz() {
     quiz.length === 0 || currentQuestionIndex === 9 ? startNewQuiz() : null;

@@ -21,7 +21,7 @@ export default function App() {
         <Route path='/home' element={<HomePage startNewQuiz={startNewQuiz}/>}/>
         <Route path='/play' element={<Quiz/>}/>
       </Routes>
-      <FooterNav/>
+      <FooterNav startNewQuiz={startNewQuiz}/>
     </div>
   )
 }

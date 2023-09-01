@@ -11,15 +11,17 @@ export const quizSlice = createSlice({
     timeOfCompletion: 0,
     score: 0,
     currentQuestionIndex: 0,
+    isStarted: false,
   },
   reducers: {
     setQuiz: (state, action) => {
+      state.isStarted = true;
       state.quiz = action.payload;
       state.currentQuestionIndex = 0;
       state.currentQuestionInfo = state.quiz[0];
       state.currentAnswers = getAllAnswers(state.currentQuestionInfo);
     },
-    incrementCorrectAnswersCount: state => {
+    incrementCorrectAnswersCount: (state) => {
       state.correctAnswersCount += 1;
     },
     setTimeOfCompletion: (state, action) => {
@@ -33,9 +35,10 @@ export const quizSlice = createSlice({
       state.currentQuestionInfo = state.quiz[state.currentQuestionIndex];
       state.currentAnswers = getAllAnswers(state.currentQuestionInfo);
     },
+    clearQuiz: (state) => state = quizSlice.getInitialState(),
   }
 })
 
-export const { setQuiz, incrementCorrectAnswersCount, setTimeOfCompletion, setScore, goToNextQuestion } = quizSlice.actions
+export const { setQuiz, incrementCorrectAnswersCount, setTimeOfCompletion, setScore, goToNextQuestion, clearQuiz } = quizSlice.actions
 
 export default quizSlice.reducer
