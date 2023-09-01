@@ -17,31 +17,30 @@ function HomePage({startNewQuiz}) {
   }
 
   return (
-
-      <div className='dashboard'>
-       <h1 className='hello'>Hello Marcel! <FcGraduationCap className='cap-icon'/></h1>
-       <p>Last Quiz result:</p>
-       <section className='last-results-wrapper'>
-          <div className='results'>
-            <div className='results-details'>
-              <p className='score'>7/10</p>
-              <FcApproval className='icon'/>
-            </div>
-            <p className='text'>ANSWERS</p>
+    <div className='dashboard'>
+      <h1 className='hello'>Hello Marcel! <FcGraduationCap className='cap-icon'/></h1>
+      <p>Last Quiz result:</p>
+      <section className='last-results-wrapper'>
+        <div className='results'>
+          <div className='results-details'>
+            <p className='score'>7/10</p>
+            <FcApproval className='icon'/>
           </div>
-          <div className='results'>
-            <div className='results-details'>
-              <p className='score'>46</p>
-              <FcClock className='icon'/>
-            </div>
-            <p className='text'>SECONDS</p>
+          <p className='text'>ANSWERS</p>
         </div>
-       </section>
-       <section className='buttons-wrapper'>
-        <Button className='button' variant="primary" onClick={startNewGame}> Start new Quiz </Button>
-        <Button className='button' variant="primary" onClick={navigateToQuiz}> Continue Quizz </Button>
-       </section>
+        <div className='results'>
+          <div className='results-details'>
+            <p className='score'>46</p>
+            <FcClock className='icon'/>
+          </div>
+          <p className='text'>SECONDS</p>
       </div>
+      </section>
+      <section className='buttons-wrapper'>
+      <Button className='button' variant="primary" onClick={startNewGame}> Start new Quiz </Button>
+      <Button className='button' variant="primary" onClick={navigateToQuiz}> Continue Quizz </Button>
+      </section>
+    </div>
   )
 }
 
