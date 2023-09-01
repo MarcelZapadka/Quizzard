@@ -2,8 +2,20 @@ import React from 'react'
 import '../HomePage/HomePage.scss'
 import Button from 'react-bootstrap/Button';
 import { FcGraduationCap, FcApproval, FcClock } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
 
-function HomePage() {
+function HomePage({startNewQuiz}) {
+  const navigate = useNavigate();
+
+  function navigateToQuiz() {
+    navigate("/play");
+  }
+
+  function startNewGame() {
+    navigateToQuiz();
+    startNewQuiz();
+  }
+
   return (
 
       <div className='dashboard'>
@@ -26,8 +38,8 @@ function HomePage() {
         </div>
        </section>
        <section className='buttons-wrapper'>
-        <Button className='button' variant="primary"> Start new Quiz </Button>
-        <Button className='button' variant="primary"> Continue Quizz </Button>
+        <Button className='button' variant="primary" onClick={startNewGame}> Start new Quiz </Button>
+        <Button className='button' variant="primary" onClick={navigateToQuiz}> Continue Quizz </Button>
        </section>
       </div>
   )

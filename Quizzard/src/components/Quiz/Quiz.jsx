@@ -3,13 +3,21 @@ import "./Quiz.scss"
 import { FcNext } from "react-icons/fc";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import getQuizzQuestions from '../../quiz-api-service';
+import { useDispatch, useSelector } from "react-redux"
 
-function Quiz() {
+function Quiz({startNewQuiz}) {
+  const quiz = useSelector(state => state.quiz.quiz);
+  const currentAnswers = useSelector(state => state.quiz.currentAnswers);
+  const currentQuestionIndex = useSelector(state => state.quiz.currentQuestionIndex);
+  let answersList = getDisplayedAnswers();
 
   useEffect(() => {
-    // getQuizzQuestions().then(data => console.log(data));
+    quiz.length === 0 ? startNewQuiz() : null;
   }, [])
+
+  function getDisplayedAnswers() {
+    return currentAnswers.map((answer, index) => <input type="button" value={answer} key={`Answer ${index}`} />);
+  }
 
   return (
       <main className='dashboard quiz'>
@@ -24,16 +32,11 @@ function Quiz() {
 
         <section className='question-and-answers-section'>
           <div className='question-wrapper'>
-            <p className='question-no'>Question 1 of 10</p>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde, laudantium ex magnam totam quas dolores?</p>
+            <p className='question-no'>Question {currentQuestionIndex + 1} of 10</p>
+            <p>{quiz[currentQuestionIndex]?.question.text}</p>
           </div>
           
-          <form className='answers-form'>
-            <input type="button" value={"Hello"} />
-            <input type="button" value={"Hello"} />
-            <input type="button" value={"Hello"} />
-            <input type="button" value={"Hello"} />
-          </form>
+          <form className='answers-form'>{answersList}</form>
         </section>
       </main>
   )
