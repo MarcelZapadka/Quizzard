@@ -1,5 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import getAllAnswers from '../answers-mapper-service';
+import { getQuizQuestions } from '../quiz-api-service';
+
+function setQuiz(state, action){
+  state.quiz = action.payload;
+  state.currentQuestionInfo = state.quiz[0];
+  state.currentQuestionIndex = 0;
+  state.currentAnswers = getAllAnswers(state.currentQuestionInfo);
+  state.isStarted = true;
+}
 
 export const quizSlice = createSlice({
   name: 'quiz',
@@ -8,37 +17,41 @@ export const quizSlice = createSlice({
     currentQuestionInfo: {},
     currentAnswers: [],
     correctAnswersCount: 0,
-    timeOfCompletion: 0,
     score: 0,
     currentQuestionIndex: 0,
     isStarted: false,
   },
   reducers: {
-    setQuiz: (state, action) => {
-      state.isStarted = true;
-      state.quiz = action.payload;
-      state.currentQuestionIndex = 0;
-      state.currentQuestionInfo = state.quiz[0];
-      state.currentAnswers = getAllAnswers(state.currentQuestionInfo);
-    },
     incrementCorrectAnswersCount: (state) => {
       state.correctAnswersCount += 1;
-    },
-    setTimeOfCompletion: (state, action) => {
-      state.timeOfCompletion += action.payload;
     },
     setScore: (state, action) => {
       state.score = action.payload;
     },
-    goToNextQuestion: state => {
+    goToNextQuestion: (state) => {
       state.currentQuestionIndex += 1;
       state.currentQuestionInfo = state.quiz[state.currentQuestionIndex];
       state.currentAnswers = getAllAnswers(state.currentQuestionInfo);
     },
-    clearQuiz: (state) => state = quizSlice.getInitialState(),
+    reduceTime: (state) => {
+      state.timeRemaining -= 1;
+    },
+    openTimerStatus: (state) => {
+      state.isTimerActive = true;
+    },
+    closeTimerStatus: (state) => {
+      state.isTimerActive = false;
+    },
+    clearQuiz: (state) =>  state = quizSlice.getInitialState(),
+  },
+  
+  extraReducers: builder => {
+    builder.addCase(getQuizQuestions.fulfilled, (state, action) => {
+      setQuiz(state, action);
+    });
   }
 })
 
-export const { setQuiz, incrementCorrectAnswersCount, setTimeOfCompletion, setScore, goToNextQuestion, clearQuiz } = quizSlice.actions
+export const { incrementCorrectAnswersCount, setScore, goToNextQuestion, clearQuiz } = quizSlice.actions
 
 export default quizSlice.reducer

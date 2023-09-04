@@ -3,35 +3,6 @@
   border-top-left-radius: 2%;
   border-top-right-radius: 2%;
 
-  .info-panel {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 20px;
-
-    .CircularProgressbar {
-      width: 70px;
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%);
-
-      .CircularProgressbar-text {
-        font-size: 30px;
-        transform: translate(2px,3px);
-      }
-    }
-
-    .skip-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-
-      .icon {
-        transform: translateY(-0.5px);
-      }
-    }
-  }
-
   .question-and-answers-section {
     margin-top: auto;
     margin-bottom: 12px;
