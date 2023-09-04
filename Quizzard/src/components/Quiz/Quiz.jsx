@@ -1,29 +1,32 @@
-import { React, useEffect} from 'react'
+import { React } from 'react'
 import "./Quiz.scss"
-import { FcNext } from "react-icons/fc";
-import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 import { useDispatch, useSelector } from "react-redux"
-import { incrementCorrectAnswersCount, goToNextQuestion, clearQuiz } from '../../redux/quizSlice';
+import { incrementCorrectAnswersCount, goToNextQuestion } from '../../redux/quizSlice';
 import { useNavigate } from "react-router-dom";
+import InfoPanel from './InfoPanel';
 
-function Quiz() {
+function Quiz({clearLastQuiz}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const quiz = useSelector(state => state.quiz.quiz);
   const currentAnswers = useSelector(state => state.quiz.currentAnswers);
   const currentQuestionIndex = useSelector(state => state.quiz.currentQuestionIndex);
   const currentQuestionInfo = useSelector(state => state.quiz.currentQuestionInfo);
+  const isStarted = useSelector(state => state.quiz.isStarted);
   let answersList = getDisplayedAnswers();
 
   function getDisplayedAnswers() {
     return currentAnswers.map(answer => <input type="button" value={answer} key={answer} onClick={() => submitAnswer(answer)}/>);
   }
 
+  function endQuiz() {
+    clearLastQuiz();
+    navigate("/home");
+  }
+
   function submitAnswer(answer) {
     if (currentQuestionIndex === quiz.length - 1) {
-      dispatch(clearQuiz())
-      navigate("/home");
+      endQuiz();
       return
     }
     if (answer === currentQuestionInfo.correctAnswer) {
@@ -34,16 +37,9 @@ function Quiz() {
     dispatch(goToNextQuestion());
   }
 
-  return (
+  if (isStarted) return (
       <main className='dashboard quiz'>
-        <section className='info-panel'>
-          <p style={{color: "orange"}}>Medium</p>
-          <CircularProgressbar value={45} maxValue={100} text={`45s`} />
-          <div className='skip-wrapper'>
-            <p>SKIP</p>
-            <FcNext className='icon'/>
-          </div>
-        </section>
+        <InfoPanel endQuiz={endQuiz}/>
 
         <section className='question-and-answers-section'>
           <div className='question-wrapper'>
@@ -54,6 +50,12 @@ function Quiz() {
           <form className='answers-form'>{answersList}</form>
         </section>
       </main>
+  )
+
+  return (
+    <main className='dashboard quiz'>
+      <p>loading</p>
+    </main>
   )
 }
 
