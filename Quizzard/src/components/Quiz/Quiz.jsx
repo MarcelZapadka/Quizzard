@@ -2,44 +2,42 @@ import { React } from 'react'
 import "./Quiz.scss"
 import { useDispatch, useSelector } from "react-redux"
 import { incrementCorrectAnswersCount, goToNextQuestion } from '../../redux/quizSlice';
-import { useNavigate } from "react-router-dom";
 import InfoPanel from './InfoPanel';
 
-function Quiz({clearLastQuiz}) {
-  const navigate = useNavigate();
+function Quiz({endQuiz}) {
+  const {quiz, currentAnswers, currentQuestionIndex, currentQuestionInfo, isStarted} = useSelector(state => state.quiz);
+  const answersList = getDisplayedAnswers();
   const dispatch = useDispatch();
-  const quiz = useSelector(state => state.quiz.quiz);
-  const currentAnswers = useSelector(state => state.quiz.currentAnswers);
-  const currentQuestionIndex = useSelector(state => state.quiz.currentQuestionIndex);
-  const currentQuestionInfo = useSelector(state => state.quiz.currentQuestionInfo);
-  const isStarted = useSelector(state => state.quiz.isStarted);
-  let answersList = getDisplayedAnswers();
+  const lastQuestion = currentQuestionIndex === quiz.length - 1;
 
   function getDisplayedAnswers() {
     return currentAnswers.map(answer => <input type="button" value={answer} key={answer} onClick={() => submitAnswer(answer)}/>);
   }
 
-  function endQuiz() {
-    clearLastQuiz();
-    navigate("/home");
+  function nextQuestion() {
+    dispatch(goToNextQuestion());
+  }
+
+  function skipQuestion() {
+    lastQuestion ? endQuiz() : nextQuestion();
   }
 
   function submitAnswer(answer) {
-    if (currentQuestionIndex === quiz.length - 1) {
+    if (lastQuestion) {
       endQuiz();
       return
     }
     if (answer === currentQuestionInfo.correctAnswer) {
       dispatch(incrementCorrectAnswersCount());
-      dispatch(goToNextQuestion());
+      nextQuestion();
       return
     }
-    dispatch(goToNextQuestion());
+     nextQuestion();
   }
 
   if (isStarted) return (
       <main className='dashboard quiz'>
-        <InfoPanel endQuiz={endQuiz}/>
+        <InfoPanel skipQuestion={skipQuestion}/>
 
         <section className='question-and-answers-section'>
           <div className='question-wrapper'>

@@ -3,12 +3,13 @@ import Timer from './Timer';
 import { FcNext } from "react-icons/fc";
 import './InfoPanel.scss'
 
-function InfoPanel({endQuiz}) {
+function InfoPanel({skipQuestion}) {
+
   return (
     <section className='info-panel'>
       <p style={{color: "orange"}}>Medium</p>
-      <Timer endQuiz={endQuiz}/>
-      <div className='skip-wrapper'>
+      <Timer/>
+      <div className='skip-wrapper' onClick={skipQuestion}>
         <p>SKIP</p>
         <FcNext className='icon'/>
       </div>

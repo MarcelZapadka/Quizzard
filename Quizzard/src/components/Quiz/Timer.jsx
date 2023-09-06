@@ -5,7 +5,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux'
 import { openTimerStatus, reduceTime, setTimerIntervalId } from '../../redux/timerSlice';
 
-function Timer({endQuiz}) {
+function Timer() {
   const timeRemaining = useSelector(state => state.timer.timeRemaining);
   const isTimerActive = useSelector(state => state.timer.isTimerActive);
   const dispatch = useDispatch();
@@ -19,12 +19,6 @@ function Timer({endQuiz}) {
       dispatch(setTimerIntervalId(timeReducer));
     }
   }, [])
-
-  useEffect(() => {
-    if (timeRemaining === -1) {
-      endQuiz();
-    }
-  }, [timeRemaining])
   
   return <CircularProgressbar value={timeRemaining} maxValue={120} text={`${timeRemaining}s`} />
 }
