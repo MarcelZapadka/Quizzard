@@ -3,9 +3,11 @@ import "./Quiz.scss"
 import { useDispatch, useSelector } from "react-redux"
 import { incrementCorrectAnswersCount, goToNextQuestion } from '../../redux/quizSlice';
 import InfoPanel from './InfoPanel';
+import Results from '../Results/Results';
 
 function Quiz({endQuiz}) {
-  const {quiz, currentAnswers, currentQuestionIndex, currentQuestionInfo, isStarted} = useSelector(state => state.quiz);
+  const { quiz, currentAnswers, currentQuestionIndex, currentQuestionInfo, isDataFetched, showResults, correctAnswersCount } = useSelector(state => state.quiz);
+  const { intervalId, timeOfCompletion } = useSelector(state => state.timer);
   const answersList = getDisplayedAnswers();
   const dispatch = useDispatch();
   const lastQuestion = currentQuestionIndex === quiz.length - 1;
@@ -24,6 +26,7 @@ function Quiz({endQuiz}) {
 
   function submitAnswer(answer) {
     if (lastQuestion) {
+      clearInterval(intervalId);
       endQuiz();
       return
     }
@@ -35,7 +38,7 @@ function Quiz({endQuiz}) {
      nextQuestion();
   }
 
-  if (isStarted) return (
+  if (isDataFetched && !showResults) return (
       <main className='dashboard quiz'>
         <InfoPanel skipQuestion={skipQuestion}/>
 
@@ -48,6 +51,13 @@ function Quiz({endQuiz}) {
           <form className='answers-form'>{answersList}</form>
         </section>
       </main>
+  )
+
+  if (showResults) return (
+    <main className='dashboard quiz'>
+      <h1>Congratulations! Your result is:</h1>
+      <Results correctAnswers={correctAnswersCount} timeOfCompletion={timeOfCompletion}/>
+    </main>
   )
 
   return (

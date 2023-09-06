@@ -4,11 +4,10 @@ import FooterNav from './components/FooterNav/FooterNav'
 import { getQuizQuestions } from './quiz-api-service';
 import Quiz from './components/Quiz/Quiz'
 import '../src/App.scss'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
-import { clearQuiz } from './redux/quizSlice';
-import { resetTimer } from './redux/timerSlice';
-import { useNavigate } from "react-router-dom";
+import { clearQuiz, completeQuiz } from './redux/quizSlice';
+import { resetTimer, setTimeOfCompletion } from './redux/timerSlice';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -22,18 +21,26 @@ export default function App() {
   }
 
   function endQuiz() {
-    clearLastQuiz();
-    location.pathname === '/play' ? navigate('/home') : null;
+    clearInterval(timerIntervalId);
+    dispatch(setTimeOfCompletion());
+    dispatch(completeQuiz());
+    window.
+    setTimeout(() => {
+      clearLastQuiz();
+      location.pathname === '/play' ? navigate('/home') : null;
+    }, 3500)
   }
 
   function clearLastQuiz() {
-    clearInterval(timerIntervalId);
     dispatch(clearQuiz());
     dispatch(resetTimer());
   }
 
   useEffect(() => {
-    timeRemaining === -1 ? endQuiz() : null
+    if (timeRemaining === -1) {
+      endQuiz();
+      dispatch(setTimeOfCompletion(1));
+    }
   }, [timeRemaining])
 
   return (

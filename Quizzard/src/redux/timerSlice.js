@@ -10,7 +10,12 @@ export const timerSlice = createSlice({
   },
   reducers: {
     setTimeOfCompletion: (state, action) => {
-      state.timeOfCompletion += action.payload;
+      if (action.payload) {
+        state.timeOfCompletion -= action.payload
+      } else {
+        const initialTime = timerSlice.getInitialState().timeRemaining;
+        state.timeOfCompletion = initialTime - state.timeRemaining;
+      }
     },
     reduceTime: (state) => {
       state.timeRemaining -= 1;
