@@ -7,13 +7,17 @@ import '../src/App.scss'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { clearQuiz, completeQuiz } from './redux/quizSlice';
-import { resetTimer, setTimeOfCompletion } from './redux/timerSlice';
+import { resetTimer } from './redux/timerSlice';
+import History from './components/History/History';
+import { saveToHistory } from './history-service';
 
 export default function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { timerIntervalId, timeRemaining } = useSelector(state => state.timer);
+  const { timerIntervalId, timeRemaining, initialTimerState } = useSelector(state => state.timer);
+  const { correctAnswersCount } = useSelector(state => state.quiz);
+  const timeOfCompletion = initialTimerState - timeRemaining;
 
   function startNewQuiz() {
     clearLastQuiz();
@@ -22,13 +26,12 @@ export default function App() {
 
   function endQuiz() {
     clearInterval(timerIntervalId);
-    dispatch(setTimeOfCompletion());
     dispatch(completeQuiz());
-    window.
+    saveToHistory({score: correctAnswersCount, time: timeOfCompletion});
     setTimeout(() => {
       clearLastQuiz();
       location.pathname === '/play' ? navigate('/home') : null;
-    }, 3500)
+    }, 2000)
   }
 
   function clearLastQuiz() {
@@ -37,9 +40,11 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (timeRemaining === -1) {
-      endQuiz();
-      dispatch(setTimeOfCompletion(1));
+    if (timeRemaining === 0) {
+      clearInterval(timerIntervalId);
+      setTimeout(() => {
+        endQuiz();
+      }, 1000)
     }
   }, [timeRemaining])
 
@@ -47,7 +52,8 @@ export default function App() {
     <div className='App'>
       <Routes>
         <Route path='/home' element={<HomePage startNewQuiz={startNewQuiz}/>}/>
-        <Route path='/play' element={<Quiz endQuiz={endQuiz}/>}/>
+        <Route path='/play' element={<Quiz endQuiz={endQuiz} timeOfCompletion={timeOfCompletion}/>}/>
+        <Route path='/history' element={<History/>}/>
       </Routes>
       <FooterNav startNewQuiz={startNewQuiz}/>
     </div>

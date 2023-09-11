@@ -5,9 +5,9 @@ import { incrementCorrectAnswersCount, goToNextQuestion } from '../../redux/quiz
 import InfoPanel from './InfoPanel';
 import Results from '../Results/Results';
 
-function Quiz({endQuiz}) {
+function Quiz({endQuiz, timeOfCompletion}) {
   const { quiz, currentAnswers, currentQuestionIndex, currentQuestionInfo, isDataFetched, showResults, correctAnswersCount } = useSelector(state => state.quiz);
-  const { intervalId, timeOfCompletion } = useSelector(state => state.timer);
+  const { intervalId } = useSelector(state => state.timer);
   const answersList = getDisplayedAnswers();
   const dispatch = useDispatch();
   const lastQuestion = currentQuestionIndex === quiz.length - 1;
@@ -47,7 +47,6 @@ function Quiz({endQuiz}) {
             <p className='question-no'>Question {currentQuestionIndex + 1} of 10</p>
             <p>{quiz[currentQuestionIndex]?.question.text}</p>
           </div>
-          
           <form className='answers-form'>{answersList}</form>
         </section>
       </main>

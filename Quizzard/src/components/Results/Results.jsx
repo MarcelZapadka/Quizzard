@@ -1,4 +1,3 @@
-import React from 'react'
 import './Results.scss'
 import { FcApproval, FcClock } from "react-icons/fc";
 
